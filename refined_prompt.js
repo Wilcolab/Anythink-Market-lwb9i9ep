@@ -91,20 +91,4 @@ function toKebabCase(str) {
         .replace(/^-+|-+$/g, '');
 }
 
-// Refined Prompt: Write a JavaScript function named `toCamelCase`
-// that takes a string with multiple words and returns a single camelCase string.
-// The first word should be lowercase, and the first letter of each subsequent word should be capitalized.
-// Ignore punctuation and preserve only letters and spaces.
-
-function toCamelCase(str) {
-  return str
-    .toLowerCase()
-    .replace(/[^a-zA-Z ]/g, '') // Remove non-letter chars
-    .split(' ')
-    .map((word, index) => {
-      if (index === 0) return word;
-      return word.charAt(0).toUpperCase() + word.slice(1);
-    })
-    .join('');
-}
 
