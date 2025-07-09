@@ -93,7 +93,70 @@ describe('Arithmetic', function () {
         });
     });
 
-// TODO: Challenge #1
+describe('Power', function () {
+    it('returns 8 for 2 raised to the power 3', function (done) {
+        request.get('/arithmetic?operation=power&operand1=2&operand2=3')
+            .expect(200)
+            .end(function (err, res) {
+                expect(res.body).to.eql({ result: 8 });
+                done();
+            });
+    });
+
+    it('returns 1 when any number is raised to the power 0', function (done) {
+        request.get('/arithmetic?operation=power&operand1=5&operand2=0')
+            .expect(200)
+            .end(function (err, res) {
+                expect(res.body).to.eql({ result: 1 });
+                done();
+            });
+    });
+
+    it('returns the same number when raised to the power 1', function (done) {
+        request.get('/arithmetic?operation=power&operand1=7&operand2=1')
+            .expect(200)
+            .end(function (err, res) {
+                expect(res.body).to.eql({ result: 7 });
+                done();
+            });
+    });
+
+    it('handles negative base with positive exponent', function (done) {
+        request.get('/arithmetic?operation=power&operand1=-2&operand2=3')
+            .expect(200)
+            .end(function (err, res) {
+                expect(res.body).to.eql({ result: -8 });
+                done();
+            });
+    });
+
+    it('handles positive base with negative exponent', function (done) {
+        request.get('/arithmetic?operation=power&operand1=2&operand2=-2')
+            .expect(200)
+            .end(function (err, res) {
+                expect(res.body).to.eql({ result: 0.25 });
+                done();
+            });
+    });
+
+    it('calculates power with a decimal base', function (done) {
+        request.get('/arithmetic?operation=power&operand1=2.5&operand2=2')
+            .expect(200)
+            .end(function (err, res) {
+                expect(res.body).to.eql({ result: 6.25 });
+                done();
+            });
+    });
+
+    it('handles exponential notation correctly', function (done) {
+        request.get('/arithmetic?operation=power&operand1=4.2e1&operand2=1')
+            .expect(200)
+            .end(function (err, res) {
+                expect(res.body).to.eql({ result: 42 });
+                done();
+            });
+    });
+});
  
 
     describe('Multiplication', function () {
