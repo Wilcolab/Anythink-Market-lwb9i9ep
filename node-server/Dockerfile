@@ -6,10 +6,10 @@ WORKDIR /app
 COPY package*.json /app
 
 # Install dependencies
-RUN yarn install
+RUN npm ci
 
 # Expose port
 EXPOSE 8001
 
 # Start the application
-CMD [ "yarn", "start" ]
+CMD [ "npm", "start" ]
