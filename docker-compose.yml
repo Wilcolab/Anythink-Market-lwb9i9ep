@@ -7,3 +7,19 @@ services:
       - 8000:8000
     volumes:
       - ./python-server/src:/app/src
+    environment:
+      - NODE_ENV=development
+
+  js-server:
+    build:
+      context: ./js-server
+      dockerfile: Dockerfile
+    ports:
+      - 8001:8001
+    volumes:
+      - ./js-server/src:/app/src
+      - ./js-server/package.json:/app/package.json
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - python-server
