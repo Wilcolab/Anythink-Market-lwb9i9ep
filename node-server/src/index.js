@@ -5,7 +5,7 @@ const morgan = require('morgan');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8001;
 
 // Middleware
 app.use(helmet());
@@ -156,6 +156,7 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on http://localhost:${PORT}`);
   console.log(`📚 API Documentation: http://localhost:${PORT}/`);
+  console.log(`🌱 Environment: ${process.env.NODE_ENV}`);
 });
 
 module.exports = app;
