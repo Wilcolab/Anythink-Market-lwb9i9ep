@@ -4,6 +4,31 @@ services:
       context: ./python-server
       dockerfile: Dockerfile
     ports:
-      - 8000:8000
+      - "8000:8000"
     volumes:
       - ./python-server/src:/app/src
+    environment:
+      - PORT=8000
+    networks:
+      - app-network
+
+  node-server:
+    build:
+      context: ./node-server
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./node-server:/app
+      - /app/node_modules
+    environment:
+      - PORT=8001
+      - NODE_ENV=development
+    depends_on:
+      - python-server
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
