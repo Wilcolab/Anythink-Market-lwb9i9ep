@@ -1,185 +1,76 @@
-# Anythink Market - Dual Server Setup
+# Node.js Server
 
-This project demonstrates both Python FastAPI and Node.js Express servers running simultaneously, providing identical task management APIs. This setup allows for easy migration testing and comparison between the two implementations.
-
-## Architecture Overview
-
-The project includes both servers running in parallel:
-- **Python FastAPI Server**: Port `8000` 
-- **Node.js Express Server**: Port `8001`
-
-Both servers provide the same API endpoints and functionality, making it easy to migrate from Python to Node.js while maintaining backward compatibility.
+This project now uses a Node.js server implemented with Express.js to manage the task list. The Node.js server replaces the previous FastAPI Python server, providing the same API routes for task management.
 
 ## Project Structure
 
-```
-.
-├── docker-compose.yml          # Orchestrates both servers
-├── python-server/              # Original FastAPI implementation
-│   ├── src/
-│   │   ├── main.py            # FastAPI server with task routes
-│   │   └── __init__.py        # Python package marker
-│   ├── Dockerfile             # Python server containerization
-│   └── requirements.txt       # Python dependencies
-└── node-server/               # New Express.js implementation
-    ├── server.js              # Express server with converted routes
-    ├── package.json           # Node.js dependencies and scripts
-    ├── Dockerfile             # Node.js server containerization
-    ├── .dockerignore          # Docker ignore patterns
-    └── README.md              # Node.js specific documentation
-```
+The updated project includes the following files and directories for the Node.js server:
+
+- `node-server/src/index.js`: Main entry point for the Express.js server, implementing the API routes for adding and retrieving tasks.
+- `node-server/package.json`: Lists dependencies and scripts for the Node.js server.
+- `node-server/Dockerfile`: Builds a Docker image for the Node.js server, installing dependencies and starting the server.
+- `docker-compose.yml`: Updated to use the Node.js server service instead of the Python server.
 
 ## Getting Started
 
-### Running Both Servers (Recommended)
+To run the Node.js server using Docker:
 
-To run both servers simultaneously using Docker Compose:
+- Build and start the Docker containers:
 
-```shell
-docker compose up --build
-```
+  ```shell
+  docker compose up
+  ```
 
-This will:
-- Build Docker images for both servers
-- Start the Python server on port `8000`
-- Start the Node.js server on port `8001`
-- Create a shared network for inter-service communication
+  This will build the Docker image for the Node.js server and start the containers as defined in `docker-compose.yml`.
 
-### Running Individual Servers
+- The Node.js server will be accessible at port `8000`.
 
-**Python Server Only:**
-```shell
-docker compose up python-server
-```
+## API Routes
 
-**Node.js Server Only:**
-```shell
-docker compose up node-server
-```
+The Node.js server provides the following API routes:
 
-### Local Development
+- `POST /tasks`: Adds a task to the task list. The request body should contain the task details.
+- `GET /tasks`: Retrieves the task list.
 
-**Python Server:**
-```shell
-cd python-server
-pip install -r requirements.txt
-uvicorn src.main:app --reload --port 8000
-```
+---
 
-**Node.js Server:**
-```shell
-cd node-server
-npm install
-npm run dev  # Uses nodemon for hot reload
-```
+The previous Python FastAPI server files are no longer used. All task management functionality is now handled by the Node.js server.
+# Python Server
 
-## API Endpoints
+This project contains a FastAPI server implemented in Python. It provides two routes for managing a task list.
 
-Both servers provide identical API functionality:
+## Project Structure
 
-### GET /tasks
-Retrieves the current task list.
+The project has the following files and directories:
 
-**Request:**
-```shell
-curl -X GET http://localhost:8000/tasks  # Python server
-curl -X GET http://localhost:8001/tasks  # Node.js server
-```
+- `python-server/src/main.py`: This file contains the implementation of the FastAPI server with two routes. It handles adding a task to a list and retrieving the list.
 
-**Response:**
-```json
-{
-  "tasks": [
-    "Write a diary entry from the future",
-    "Create a time machine from a cardboard box",
-    "Plan a trip to the dinosaurs",
-    "Draw a futuristic city",
-    "List items to bring on a time-travel adventure"
-  ]
-}
-```
+- `python-server/src/__init__.py`: This file is an empty file that marks the `src` directory as a Python package.
 
-### POST /tasks
-Adds a new task to the list.
+- `python-server/requirements.txt`: This file lists the dependencies required for the FastAPI server and other dependencies.
 
-**Request:**
-```shell
-curl -X POST http://localhost:8000/tasks \  # Python server
-  -H "Content-Type: application/json" \
-  -d '{"text": "Build a rocket ship"}'
+- `python-server/Dockerfile`: This file is used to build a Docker image for the FastAPI server. It specifies the base image, copies the source code into the image, installs the dependencies, and sets the command to run the server.
 
-curl -X POST http://localhost:8001/tasks \  # Node.js server
-  -H "Content-Type: application/json" \
-  -d '{"text": "Build a rocket ship"}'
-```
+- `docker-compose.yml`: This file is used to define and run multi-container Docker applications. It specifies the services to run, their configurations, and any dependencies between them.
 
-**Response:**
-```json
-{
-  "message": "Task added successfully"
-}
-```
+## Getting Started
 
-### GET /
-Root endpoint with server information.
+To run the FastAPI server using Docker, follow these steps:
 
-**Node.js Response:**
-```json
-{
-  "message": "Hello World",
-  "timestamp": "2025-07-09T19:34:14.113Z"
-}
-```
+- Build and start the Docker containers by running the following command:
 
-**Python Response:**
-```
-"Hello World"
-```
+  ```shell
+  docker compose up
+  ```
 
-## Migration Guide
+  This command will build the Docker image for the FastAPI server and start the containers defined in the `docker-compose.yml` file.
 
-### From Python to Node.js
+- The FastAPI server should now be running. You can access at port `8000`.
 
-The Node.js server has been designed to be a drop-in replacement for the Python server:
+## API Routes
 
-1. **API Compatibility**: All endpoints maintain the same request/response format
-2. **Error Handling**: Comprehensive validation and error responses
-3. **Async Operations**: Ready for database integration with async/await
-4. **Docker Support**: Full containerization with optimized builds
+The FastAPI server provides the following API routes:
 
-### Key Differences
+- `POST /tasks`: Adds a task to the task list. The request body should contain the task details.
 
-| Feature | Python FastAPI | Node.js Express |
-|---------|---------------|----------------|
-| **Port** | 8000 | 8001 |
-| **Runtime** | Python 3.9 | Node.js 18 |
-| **Framework** | FastAPI + Uvicorn | Express.js |
-| **Validation** | Pydantic models | Manual validation |
-| **Auto Docs** | Built-in Swagger UI | Manual documentation |
-| **Hot Reload** | `--reload` flag | nodemon |
-
-### Production Considerations
-
-For production migration:
-1. Update client applications to use port `8001`
-2. Implement database connectivity in Node.js server
-3. Add authentication/authorization middleware
-4. Configure proper logging and monitoring
-5. Update load balancer/reverse proxy configuration
-
-## Development Features
-
-- **Hot Reload**: Both servers support development mode with auto-restart
-- **Docker Compose**: Simplified multi-container development
-- **Network Isolation**: Services communicate through Docker network
-- **Volume Mounting**: Source code changes reflect immediately
-- **Comprehensive Logging**: Request/response logging for debugging
-
-## Next Steps
-
-1. **Database Integration**: Add persistent storage (MongoDB, PostgreSQL)
-2. **Authentication**: Implement JWT or OAuth2 authentication
-3. **API Documentation**: Add OpenAPI/Swagger documentation to Node.js
-4. **Testing**: Add comprehensive unit and integration tests
-5. **CI/CD**: Set up automated testing and deployment pipelines
-
+- `GET /tasks`: Retrieves the task list.
