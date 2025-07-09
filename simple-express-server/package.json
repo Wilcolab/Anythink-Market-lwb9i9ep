@@ -1,0 +1,19 @@
+{
+  "name": "simple-express-server",
+  "version": "1.0.0",
+  "description": "A simple Express.js server with no endpoints",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "nodemon src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": ["express", "server", "nodejs"],
+  "author": "",
+  "license": "MIT"
+}
